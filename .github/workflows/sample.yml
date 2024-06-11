@@ -22,7 +22,7 @@ jobs:
   android:
     strategy:
       matrix:
-        os: [ macos-11 ]
+        os: [ macos-13 ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
