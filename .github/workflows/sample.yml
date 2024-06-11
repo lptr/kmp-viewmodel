@@ -60,6 +60,25 @@ jobs:
 
       - name: Build
         run: ./gradlew :sample:app:assembleDebug --stacktrace
+
+      - name: Check for JVM crash logs
+        if: failure()
+        run: |
+          mkdir -p crash_logs
+          find . -name 'hs_err_pid*.log' -exec mv {} crash_logs/ \;
+          if [ -n "$(ls -A crash_logs)" ]; then
+            echo "JVM crash logs found."
+          else
+            echo "No JVM crash logs found."
+          fi
+
+      - name: Upload JVM crash logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jvm-crash-logs
+          path: crash_logs/
+
   ios:
     strategy:
       matrix:
@@ -140,3 +159,21 @@ jobs:
           destination: platform=iOS Simulator,name=iphone-12-pro
           configuration: Debug
           build-settings: CODE_SIGNING_REQUIRED=NO
+
+      - name: Check for JVM crash logs
+        if: failure()
+        run: |
+          mkdir -p crash_logs
+          find . -name 'hs_err_pid*.log' -exec mv {} crash_logs/ \;
+          if [ -n "$(ls -A crash_logs)" ]; then
+            echo "JVM crash logs found."
+          else
+            echo "No JVM crash logs found."
+          fi
+
+      - name: Upload JVM crash logs
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: jvm-crash-logs
+          path: crash_logs/
