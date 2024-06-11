@@ -59,7 +59,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        run: ./gradlew :sample:app:assembleDebug --stacktrace
+        run: ./gradlew :sample:app:assembleDebug --stacktrace --no-watch-fs
 
       - name: Check for JVM crash logs
         if: failure()
